@@ -11,6 +11,7 @@ The structure of the repository is following.
 - **scripts/** has code that is required to analyze the data in simple python scripts.
 - **notebooks/** has Jupyter notebooks used for analysis of the data.
 - **results/** has the result images, summaries and visuals from the analysis.
+- **data/** has datasets that is used for analysis. The data files are tracked using `git lfs`. The description of dataset can be found in the README inside this folder.
 
 ---
 #### Environment setup
