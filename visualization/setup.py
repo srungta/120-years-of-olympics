@@ -1,13 +1,24 @@
 import argparse
 import pandas as pd
 from elasticsearch import Elasticsearch
+import logging
+logging.basicConfig(level=logging.DEBUG)
 
 
 def main(athletefile, nocfile,
-         indexname, chunksize, doctype, verbose):
-    # print(athletefile, nocfile,
-    #       indexname, chunksize, doctype, verbose)
-    None
+         indexname, chunksize, doctype, deleteexisting, verbose):
+    logger = logging.getLogger(name=__name__)
+    if verbose == False:
+        logger.disabled = True
+    logger.info("All arguments received. Starting to index.")
+    logger.debug("Reading athlete file.")
+    athlete_events = pd.read_csv(athletefile, chunksize=chunksize)
+    logger.debug("Athlete file read in a dataframe.")
+    logger.debug("Reading noc file.")
+    noc_file = pd.read_csv(nocfile, chunksize=chunksize)
+    logger.debug("Noc file read in a dataframe.")
+    logger.debug("Initializing elastic search.")
+    logger.disabled = False
 
 
 if __name__ == '__main__':
@@ -26,6 +37,9 @@ if __name__ == '__main__':
                         help="Name of the search index.")
     parser.add_argument('--doctype', '-d', default='av-lp',
                         help='Doc type for the search index.')
+    parser.add_argument('--deleteexisting', '-de', action='store_false',
+                        help='If set to True, existing indices will be deleted.')
+
     args = parser.parse_args()
     main(args.athletefile, args.nocfile,
-         args.indexname, args.chunksize, args.doctype, args.verbose)
+         args.indexname, args.chunksize, args.doctype, args.deleteexisting, args.verbose)
